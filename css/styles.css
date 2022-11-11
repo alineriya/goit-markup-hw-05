@@ -26,6 +26,7 @@
   --portfolio-border: #EEEEEE;
   --socials-color: #AFB1B8;
   --features-icon-color: #F5F4FA;
+  --anim-fast: 250ms cubic-bezier(0.4, 0, 0.2, 1);
   --indent: 30px;
   --items: 3;
   
@@ -124,6 +125,7 @@ img {
 .header-list .link,
 .contacts .contact {
   display: flex;
+  position: relative;
   padding-top: 32px;
   padding-bottom: 32px;
  
@@ -133,6 +135,8 @@ img {
   font-size: 14px;
   line-height: 1.14;
   letter-spacing: 0.02em;
+  
+  transition: color var(--anim-fast);
 }
 
 .contacts .contact {
@@ -143,7 +147,7 @@ img {
 
 .header-list .link.current {
   color: var(--accent-color);
-  text-decoration: none;
+  /* text-decoration: none; */
 }
 
 .header-icon {
@@ -157,6 +161,29 @@ img {
   color: var(--accent-color);
 }
 
+.header-list .link.current::after {
+  content: '';
+  position:absolute;
+  left: 50%;
+  bottom: -1px;
+
+  transform: translate(-50%);
+
+  display: block;
+  width: 100%;
+  height: 4px;
+
+  border-radius: 2px;
+
+  background-color: var(--accent-color);
+
+  /* opacity: 0; */
+}
+
+/* .header-list .link.current:hover::after,
+.header-list .link.current:focus::after {
+  opacity: 1;
+} */
 
 /* Hero */
 .hero {
@@ -324,14 +351,9 @@ img {
 }
   
 .team .background {
-  /* margin-right: 30px; */
   background-color: var(--primary-bgc);
   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 2px 1px rgba(0, 0, 0, 0.2);
   border-radius: 0px 0px 4px 4px;
-}
-
-.team .background:last-child {
-  /* margin-right: 0; */
 }
 
 .team-wrapper {
@@ -339,7 +361,6 @@ img {
 }
 
 .team .title {
-  /* padding-top: 30px; */
   margin-bottom: 10px;
   color:var(--title-text-color);
   font-weight: 500;
@@ -376,6 +397,8 @@ img {
   border-radius: 50%;
   background-color: var(--primary-bgc);
   color: var(--socials-color);
+
+  transition: color var(--anim-fast), background-color var(--anim-fast);
 }
 
 .socials-link:hover,
@@ -410,6 +433,8 @@ img {
   border-radius: 4px;
   background-color: var(--primary-bgc);
   color: var(--socials-color);
+
+  transition: color var(--anim-fast) border-color var(--anim-fast);
 } 
 
 .clients-link:hover,
@@ -457,6 +482,8 @@ img {
   font-size: 14px;
   line-height: 1.71;
   display: inline-block;
+
+  transition: color var(--anim-fast);
 }
 
 .footer-contacts .address {
@@ -506,6 +533,8 @@ img {
   border-radius: 50%;
   background-color: var(--footer-socials-bgc);
   color: var(--primary-bgc);
+
+  transition: color var(--anim-fast) background-color var(--anim-fast);
 }
 
 .footer-socials-link:hover,
@@ -553,6 +582,8 @@ img {
   border: transparent;
   border-radius: 4px;
   padding: 6px 22px;
+
+  transition: color var(--anim-fast), background-color var(--anim-fast), box-shadow var(--anim-fast);
 }
 
 .button:hover,
@@ -579,6 +610,8 @@ img {
 .project {
   display: block;
   text-decoration: none;
+
+  transition: box-shadow var(--anim-fast);
 }
 
 .project:hover,
@@ -588,16 +621,26 @@ img {
 
 .project-image {
   position: relative;
+  overflow: hidden;
 }
 
 .overlay-project {
   position: absolute;
   top: 0;
   left: 0;
-  padding: 63px 24px;
+  padding-left: 24px;
+  padding-right: 24px;
+  display: flex;
+  align-items: center;
   width: 100%;
   height: 100%;
   background-color: rgba(33, 150, 243, 0.9);
+  backdrop-filter: blur(3px);
+
+  user-select: none;
+
+  transform: translatey(100%);
+  transition: transform var(--anim-fast);
 
   opacity: 0;
 }
@@ -611,6 +654,9 @@ img {
 
 .project:hover .overlay-project,
 .project:focus .overlay-project {
+
+  transform: translatey(0);
+
   opacity: 1;
 }
 
@@ -635,4 +681,76 @@ img {
   line-height: 1.88;  
 }
 
+/* Modal window */
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  background-color: rgba(0, 0, 0, 0.2);
+
+  transition: opacity var(--anim-fast), visibility var(--anim-fast);
+}
+
+.backdrop.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+
+  width: 528px;
+  min-height: 581px;
+
+
+  background-color: var(--primary-bgc);
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 2px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+
+  transition: transform var(--anim-fast), opacity var(--anim-fast);
+}
+
+.backdrop.is-hidden .modal {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-70%); 
+}
+
+.modal-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+
+  width: 30px;
+  height: 30px;
+
+  background-color: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  
+  cursor: pointer;
+}
+
+.modal-icon {
+  fill: var(--black-logo);
+}
+
+.modal-icon:hover,
+.modal-icon:focus {
+  fill: var(--accent-color);
+}
 
